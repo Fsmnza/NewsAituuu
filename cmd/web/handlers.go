@@ -113,16 +113,17 @@ func (app *application) filterCategory(category string) http.HandlerFunc {
 	}
 }
 func (app *application) renderCategoryPage(w http.ResponseWriter, r *http.Request, category string) error {
-	newsArray, err := app.news.GetByCategory(category)
+	departmentsArray, err := app.departments.GetByCategory(category)
 	if err != nil {
 		return err
 	}
-	app.render(w, r, "category.page.tmpl", &templateData{
-		Category:  category,
-		NewsArray: newsArray,
+	app.render(w, r, "categorydp.page.tmpl", &templateData{
+		Category:         category,
+		DepartmentsArray: departmentsArray,
 	})
 	return nil
 }
+
 func (app *application) contacts(writer http.ResponseWriter, request *http.Request) {
 	app.render(writer, request, "contacts.page.tmpl", &templateData{})
 }
