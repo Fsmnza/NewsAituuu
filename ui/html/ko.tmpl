@@ -1,0 +1,21 @@
+{{define "main"}}
+<h2>Latest Departments</h2>
+{{if .DepartmentsArray}}
+<table>
+    <tr>
+        <th>Title</th>
+        <th>Date of Created</th>
+        <th>ID</th>
+    </tr>
+    {{range .DepartmentsArray}}
+    <tr>
+        <td><a href='/news/dep?id={{.ID}}'>{{.Title}}</a></td>
+        <td>{{.Date}}</td>
+        <td>#{{.ID}}</td>
+    </tr>
+    {{end}}
+</table>
+{{else}}
+<p>No departments available.</p>
+{{end}}
+{{end}}
