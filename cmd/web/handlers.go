@@ -167,6 +167,7 @@ func (app *application) showDepartments(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 	s, err := app.departments.Get(id)
+
 	if err != nil {
 		if errors.Is(err, models.ErrNoRecord) {
 			app.notFound(w)
@@ -175,15 +176,7 @@ func (app *application) showDepartments(w http.ResponseWriter, r *http.Request) 
 		}
 		return
 	}
-	data := &templateData{DepartmentsArray: []*models.Departments{s}}
-	files := []string{"./ui/html/show.tmpl", "./ui/html/base.layout.tmpl", "./ui/html/footer.partial.tmpl"}
-	ts, err := template.ParseFiles(files...)
-	if err != nil {
-		app.serverError(w, err)
-		return
-	}
-	err = ts.Execute(w, data)
-	if err != nil {
-		app.serverError(w, err)
-	}
+	app.render(w, r, "show.Departments.tmpl", &templateData{
+		Departments: s,
+	})
 }
