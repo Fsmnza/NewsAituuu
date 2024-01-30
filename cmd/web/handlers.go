@@ -176,7 +176,31 @@ func (app *application) showDepartments(w http.ResponseWriter, r *http.Request) 
 		}
 		return
 	}
-	app.render(w, r, "show.Departments.tmpl", &templateData{
+	app.render(w, r, "showDep.page.tmpl", &templateData{
 		Departments: s,
 	})
+	title := r.FormValue("title")
+	content := r.FormValue("content")
+	category := r.FormValue("category")
+	if title == "" || content == "" || category == "" {
+		app.clientError(w, http.StatusBadRequest)
+		return
+	}
+
+	if len(title) > 20 || len(content) < 10 || len(content) > 200 {
+		app.clientError(w, http.StatusBadRequest)
+		return
+	}
+	validCategories := []string{"Students", "Staff", "Applicants", "Researches"}
+
+	if !malika(validCategories, category) {
+		app.clientError(w, http.StatusBadRequest)
+		return
+	}
+	id, err = app.departments.Insert(title, content, category)
+	if err != nil {
+		app.serverError(w, err)
+		return
+	}
+	http.Redirect(w, r, fmt.Sprintf("/departments?id=%d", id), http.StatusSeeOther)
 }
