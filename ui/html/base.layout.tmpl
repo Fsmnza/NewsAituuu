@@ -5,13 +5,18 @@
     <meta charset='utf-8'>
     <link rel='stylesheet' href='/static/css/pocho.css'>
     <title>{{template "title" .}} - AituNews</title>
+    <style>
+        nav a{
+            font-size: 15px;
+        }
+    </style>
 </head>
 <body>
 <header style="display: flex; justify-content: center">
-    <img src='/static/img/pocho.png' alt='AituNews Logo' style="width: 80px; height: 40px">
-    <h1 style="font-size: 150%"><a href='/'>AituNews</a></h1>
+    <img src='/static/img/pocho.png' alt='AituNews Logo' style="width: 100px; height: 50px; margin-right:22px">
+    <h1 style="font-size: 150%"><a href='/'>Astana IT University News & Events</a></h1>
 </header>
-<nav style="font-size: 10px">
+<nav style="font-size: 1ex">
     <a href='/'>Home</a>
     <a href='/news/creationPage'>Create</a>
     <a href='/news/students'>Students</a>
@@ -19,6 +24,7 @@
     <a href='/news/applicants'>Applicants</a>
     <a href='/news/researches'>Researches</a>
     <a href='/news/contacts'>Contacts</a>
+    <a href='/news/departments'>Departments</a>
 </nav>
 <main>
     {{template "main" .}}

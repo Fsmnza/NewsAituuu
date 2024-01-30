@@ -7,12 +7,14 @@ import (
 )
 
 type templateData struct {
-	News      *models.News
-	NewsArray []*models.News
-	Category  string
+	News             *models.News
+	NewsArray        []*models.News
+	Departments      *models.Departments
+	DepartmentsArray []*models.Departments
+	Category         string
 }
 
-func newTemplateCache(dir string) (map[string]*template.Template, error) { // Initialize a new map to act as the cache.
+func newTemplateCache(dir string) (map[string]*template.Template, error) {
 	cache := map[string]*template.Template{}
 	pages, err := filepath.Glob(filepath.Join(dir, "*.page.tmpl"))
 	if err != nil {

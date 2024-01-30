@@ -85,26 +85,25 @@ header a {
 }
 
 nav {
-    border-bottom: 1px solid #E4E5E7;
-    padding-top: 17px;
-    padding-bottom: 15px;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
     background: #F7F9FA;
-    height: 60px;
+    height: 100px;
     color: #6A6C6F;
 }
-
 nav a {
-    margin-right: 1.5em;
+    margin-right: 1em;
     display: inline-block;
 }
 
 nav form {
     display: inline-block;
-    margin-left: 1.5em;
+    margin-left: 1em;
 }
 
 nav div {
-    width: 50%;
+    width: 30%;
     float: left;
 }
 
@@ -113,7 +112,7 @@ nav div:last-child {
 }
 
 nav div:last-child a {
-    margin-left: 1.5em;
+    margin-left: 1em;
     margin-right: 0;
 }
 
