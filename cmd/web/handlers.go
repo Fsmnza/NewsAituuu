@@ -113,7 +113,7 @@ func (app *application) filterCategory(category string) http.HandlerFunc {
 	}
 }
 func (app *application) renderCategoryPage(w http.ResponseWriter, r *http.Request, category string) error {
-	departmentsArray, err := app.departments.GetByCategory(category)
+	departmentsArray, err := app.news.GetByCategory(category)
 	if err != nil {
 		return err
 	}
