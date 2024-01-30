@@ -33,7 +33,6 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 		app.serverError(w, err)
 	}
 }
-
 func (app *application) showNews(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(r.URL.Query().Get("id"))
 	if err != nil || id < 1 {
@@ -61,7 +60,6 @@ func (app *application) showNews(w http.ResponseWriter, r *http.Request) {
 		app.serverError(w, err)
 	}
 }
-
 func (app *application) creationPage(w http.ResponseWriter, r *http.Request) {
 	app.render(w, r, "create.page.tmpl", &templateData{})
 }
@@ -114,7 +112,6 @@ func (app *application) filterCategory(category string) http.HandlerFunc {
 		}
 	}
 }
-
 func (app *application) renderCategoryPage(w http.ResponseWriter, r *http.Request, category string) error {
 	newsArray, err := app.news.GetByCategory(category)
 	if err != nil {
@@ -126,11 +123,9 @@ func (app *application) renderCategoryPage(w http.ResponseWriter, r *http.Reques
 	})
 	return nil
 }
-
 func (app *application) contacts(writer http.ResponseWriter, request *http.Request) {
 	app.render(writer, request, "contacts.page.tmpl", &templateData{})
 }
-
 func (app *application) createDepartments(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		w.Header().Set("Allow", http.MethodPost)
@@ -160,7 +155,7 @@ func (app *application) createDepartments(w http.ResponseWriter, r *http.Request
 		app.serverError(w, err)
 		return
 	}
-	http.Redirect(w, r, fmt.Sprintf("/news/dep?id=%d", id), http.StatusSeeOther)
+	http.Redirect(w, r, fmt.Sprintf("/departments?id=%d", id), http.StatusSeeOther)
 }
 func (app *application) creationPg(w http.ResponseWriter, r *http.Request) {
 	app.render(w, r, "depart.page.tmpl", &templateData{})
@@ -181,7 +176,7 @@ func (app *application) showDepartments(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 	data := &templateData{DepartmentsArray: []*models.Departments{s}}
-	files := []string{"./ui/html/show.tmpl", "./ui/html/base.layout.tmpl", "./ui/html/footer.partial.tmpl", "./ui/html/base.layout.tmpl"}
+	files := []string{"./ui/html/show.tmpl", "./ui/html/base.layout.tmpl", "./ui/html/footer.partial.tmpl"}
 	ts, err := template.ParseFiles(files...)
 	if err != nil {
 		app.serverError(w, err)
