@@ -15,7 +15,6 @@ type application struct {
 	errorLog      *log.Logger
 	infoLog       *log.Logger
 	news          *mysql.NewsModel
-	departments   *mysql.DepartmentsModel
 	templateCache map[string]*template.Template
 }
 
@@ -38,7 +37,6 @@ func main() {
 		errorLog:      errorLog,
 		infoLog:       infoLog,
 		news:          &mysql.NewsModel{DB: db},
-		departments:   &mysql.DepartmentsModel{DB: db},
 		templateCache: templateCache,
 	}
 	srv := &http.Server{

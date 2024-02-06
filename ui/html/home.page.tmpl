@@ -1,7 +1,7 @@
 {{template "base" .}}
 {{define "title"}}Home{{end}}
 {{define "main"}}
-        <h2>Latest Articles</h2> {{if .NewsArray}}
+<h2>Latest Articles</h2> {{if .NewsArray}}
 <table>
     <tr>
         <th>Title</th>
@@ -11,7 +11,7 @@
     </tr>
     {{range .NewsArray}}
     <tr>
-        <td><a href='/departments?id={{.ID}}'>{{.Title}}</a></td>
+        <td><a href='/news?id={{.ID}}'>{{.Title}}</a></td>
         <td>{{.Date}}</td>
         <td>{{.Category}}</td>
         <td>#{{.ID}}</td>

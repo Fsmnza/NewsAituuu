@@ -2,7 +2,7 @@
 {{define "title"}}{{.Category}} News{{end}}
 {{define "main"}}
 <h2>{{.Category}} News</h2>
-{{if .DepartmentsArray}}
+{{if .NewsArray}}
 <table>
     <tr>
         <th>Title</th>
@@ -11,8 +11,9 @@
     </tr>
     {{range .NewsArray}}
     <tr>
-        <td><a href='/departments?id={{.ID}}'>{{.Title}}</a></td>
+        <td><a href='/news?id={{.ID}}'>{{.Title}}</a></td>
         <td>{{.Date}}</td>
+        <td>#{{.ID}}</td>
         <td>#{{.ID}}</td>
     </tr>
     {{end}}
