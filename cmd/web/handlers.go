@@ -4,7 +4,6 @@ import (
 	"alexedwards.net/snippetbox/pkg/models"
 	"errors"
 	"fmt"
-	"html/template"
 	"net/http"
 	"strconv"
 	_ "strings"
@@ -17,21 +16,10 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	s, err := app.news.Latest()
-	if err != nil {
-		app.serverError(w, err)
-		return
-	}
-	data := &templateData{NewsArray: s}
-	files := []string{"./ui/html/home.page.tmpl", "./ui/html/base.layout.tmpl", "./ui/html/footer.partial.tmpl"}
-	ts, err := template.ParseFiles(files...)
-	if err != nil {
-		app.serverError(w, err)
-		return
-	}
-	err = ts.Execute(w, data)
-	if err != nil {
-		app.serverError(w, err)
-	}
+	app.serverError(w, err)
+	app.render(w, r, "home.page.tmpl", &templateData{
+		NewsArray: s,
+	})
 }
 func (app *application) showNews(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(r.URL.Query().Get("id"))
@@ -39,7 +27,7 @@ func (app *application) showNews(w http.ResponseWriter, r *http.Request) {
 		app.notFound(w)
 		return
 	}
-	s, err := app.news.Get(id)
+	n, err := app.news.Get(id)
 	if err != nil {
 		if errors.Is(err, models.ErrNoRecord) {
 			app.notFound(w)
@@ -48,18 +36,11 @@ func (app *application) showNews(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
-	data := &templateData{News: s}
-	files := []string{"./ui/html/show.page.tmpl", "./ui/html/base.layout.tmpl", "./ui/html/footer.partial.tmpl"}
-	ts, err := template.ParseFiles(files...)
-	if err != nil {
-		app.serverError(w, err)
-		return
-	}
-	err = ts.Execute(w, data)
-	if err != nil {
-		app.serverError(w, err)
-	}
+	app.render(w, r, "show.page.tmpl", &templateData{
+		News: n,
+	})
 }
+
 func (app *application) creationPage(w http.ResponseWriter, r *http.Request) {
 	app.render(w, r, "create.page.tmpl", nil)
 }
@@ -93,6 +74,7 @@ func (app *application) createNews(w http.ResponseWriter, r *http.Request) {
 		app.serverError(w, err)
 		return
 	}
+	app.session.Put(r, "flash", "Snippet successfully created!")
 	http.Redirect(w, r, fmt.Sprintf("/news?id=%d", id), http.StatusSeeOther)
 }
 func malika(slice []string, s string) bool {
