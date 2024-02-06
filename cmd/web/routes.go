@@ -13,7 +13,7 @@ func (app *application) routes() http.Handler {
 	mux.Get("/", dynamicMiddleware.ThenFunc(app.home))
 	mux.Get("/news", dynamicMiddleware.ThenFunc(app.showNews))
 	mux.Get("/news/create", dynamicMiddleware.ThenFunc(app.createNews))
-	mux.Post("/news/create", dynamicMiddleware.ThenFunc(app.createNews))
+	//mux.Post("/news/create", dynamicMiddleware.ThenFunc(app.createNews))
 	mux.Get("/news/creationPage", dynamicMiddleware.ThenFunc(app.creationPage))
 	mux.Get("/news/creationPage", dynamicMiddleware.ThenFunc(app.creationPage))
 	mux.Get("/news/contacts", dynamicMiddleware.ThenFunc(app.contacts))

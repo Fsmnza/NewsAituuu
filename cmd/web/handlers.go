@@ -34,18 +34,21 @@ func (app *application) showNews(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		if errors.Is(err, models.ErrNoRecord) {
 			app.notFound(w)
-		} else {
-			app.serverError(w, err)
+			return
 		}
+		app.serverError(w, err)
+		return
+	}
+	if n == nil {
+		app.notFound(w)
 		return
 	}
 	app.render(w, r, "show.page.tmpl", &templateData{
 		News: n,
 	})
 }
-
 func (app *application) creationPage(w http.ResponseWriter, r *http.Request) {
-	app.render(w, r, "create.page.tmpl", nil)
+	app.render(w, r, "create.page.tmpl", &templateData{})
 }
 
 func (app *application) createNews(w http.ResponseWriter, r *http.Request) {
@@ -61,13 +64,11 @@ func (app *application) createNews(w http.ResponseWriter, r *http.Request) {
 		app.clientError(w, http.StatusBadRequest)
 		return
 	}
-
 	if len(title) > 20 || len(content) < 10 || len(content) > 200 {
 		app.clientError(w, http.StatusBadRequest)
 		return
 	}
 	validCategories := []string{"Students", "Staff", "Applicants", "Researches"}
-
 	if !malika(validCategories, category) {
 		app.clientError(w, http.StatusBadRequest)
 		return
@@ -77,7 +78,7 @@ func (app *application) createNews(w http.ResponseWriter, r *http.Request) {
 		app.serverError(w, err)
 		return
 	}
-	app.session.Put(r, "flash", "Snippet successfully created!")
+	app.session.Put(r, "flash", "News successfully created!")
 	http.Redirect(w, r, fmt.Sprintf("/news?id=%d", id), http.StatusSeeOther)
 }
 func malika(slice []string, s string) bool {
