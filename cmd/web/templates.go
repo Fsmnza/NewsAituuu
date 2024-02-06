@@ -1,6 +1,7 @@
 package main
 
 import (
+	"alexedwards.net/snippetbox/pkg/forms"
 	"alexedwards.net/snippetbox/pkg/models"
 	"html/template"
 	"path/filepath"
@@ -8,10 +9,11 @@ import (
 
 type templateData struct {
 	News        *models.News
-	NewsArray   []*models.News
 	CurrentYear int
 	Flash       string
 	Category    string
+	NewsArray   []*models.News
+	Form        *forms.Form
 }
 
 func newTemplateCache(dir string) (map[string]*template.Template, error) {

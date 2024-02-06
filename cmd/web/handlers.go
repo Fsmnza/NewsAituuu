@@ -16,7 +16,10 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	s, err := app.news.Latest()
-	app.serverError(w, err)
+	if err != nil {
+		app.serverError(w, err)
+		return
+	}
 	app.render(w, r, "home.page.tmpl", &templateData{
 		NewsArray: s,
 	})
