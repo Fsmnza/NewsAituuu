@@ -24,7 +24,7 @@ type application struct {
 
 func main() {
 	data := "user=postgres password=postgres dbname=news sslmode=disable host=localhost port=5431"
-	addr := flag.String("addr", ":8700", "HTTP network address")
+	addr := flag.String("addr", ":8790", "HTTP network address")
 	secret := flag.String("secret", "s6Ndh+pPbnzHbS*+9Pk8qGWhTzbpa@ge", "Secret key")
 	flag.Parse()
 	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)

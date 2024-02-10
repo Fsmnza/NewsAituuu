@@ -27,12 +27,10 @@
 </header>
 <nav>
     <ul>
-        <li><a href='/'>Home</a></li>
-        {{if .IsAuthenticated}}
-        <li><a href='/news/creationPage'>Create</a></li>
-        {{end}}
         <li><a href='/news/contacts'>Contacts</a></li>
         {{if .IsAuthenticated}}
+        <li><a href='/'>Home</a></li>
+        <li><a href='/news/creationPage'>Create</a></li>
         <li><a href='/news/students'>Students</a></li>
         <li><a href='/news/staff'>Staff</a></li>
         <li><a href='/news/applicants'>Applicants</a></li>

@@ -33,6 +33,14 @@ func (app *application) addDefaultData(td *templateData, r *http.Request) *templ
 	td.CurrentYear = time.Now().Year()
 	td.Flash = app.session.PopString(r, "flash")
 	td.IsAuthenticated = app.isAuthenticated(r)
+	if td.IsAuthenticated {
+		userId := app.session.GetInt(r, "authenticatedUserID")
+		user, err := app.users.Get(userId)
+		if err != nil {
+			app.errorLog.Fatal("We cant find user")
+		}
+		td.UserRole = user.Role
+	}
 	return td
 }
 

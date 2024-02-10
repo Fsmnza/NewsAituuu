@@ -30,7 +30,6 @@ func (m *UserModel) Insert(name, email, password string) error {
 		}
 		return err
 	}
-
 	return nil
 }
 
@@ -58,5 +57,16 @@ func (m *UserModel) Authenticate(email, password string) (int, error) {
 	return id, nil
 }
 func (m *UserModel) Get(id int) (*models.User, error) {
+	stmt := "Select * from users where id =$1"
+	row := m.DB.QueryRow(stmt, id)
+	d := &models.User{}
+	err := row.Scan(&d.ID, &d.Email, &d.HashedPassword, &d.Role)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, models.ErrNoRecord
+		} else {
+			return nil, err
+		}
+	}
 	return nil, nil
 }
