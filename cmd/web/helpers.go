@@ -22,9 +22,7 @@ func (app *application) notFound(w http.ResponseWriter) {
 }
 
 func (app *application) isAuthenticated(r *http.Request) bool {
-	isAuthenticated := app.session.Exists(r, "authenticatedUserID")
-	fmt.Println("IsAuthenticated:", isAuthenticated)
-	return isAuthenticated
+	return app.session.Exists(r, "authenticatedUserID")
 }
 
 func (app *application) render(w http.ResponseWriter, r *http.Request, name string, td *templateData) {
@@ -37,15 +35,6 @@ func (app *application) render(w http.ResponseWriter, r *http.Request, name stri
 	if err != nil {
 		app.serverError(w, err)
 	}
-}
-func (app *application) creationPg(w http.ResponseWriter, r *http.Request) {
-	app.render(w, r, "creationPage.page.tmpl", &templateData{
-		IsAuthenticated: app.isAuthenticated(r),
-	})
-	app.render(w, r, "login.page.tmpl", &templateData{
-		IsAuthenticated: false,
-	})
-
 }
 
 func (app *application) addDefaultData(td *templateData, r *http.Request) *templateData {

@@ -153,8 +153,7 @@ func (app *application) loginUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	app.session.Put(r, "authenticatedUserID", userID)
-	app.session.Put(r, "flash", "Login is successful")
-	http.Redirect(w, r, "/news/creationPage", http.StatusSeeOther)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
 func (app *application) logoutUser(w http.ResponseWriter, r *http.Request) {
