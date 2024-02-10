@@ -126,6 +126,7 @@ func (app *application) signupUser(w http.ResponseWriter, r *http.Request) {
 	name := r.FormValue("name")
 	email := r.FormValue("email")
 	password := r.FormValue("password")
+	//role := models.RoleUser
 	fmt.Println(name + email + password)
 	err = app.users.Insert(name, email, password)
 	if err != nil {
@@ -139,6 +140,7 @@ func (app *application) loginUserForm(w http.ResponseWriter, r *http.Request) {
 	app.render(w, r, "login.page.tmpl", &templateData{})
 }
 func (app *application) loginUser(w http.ResponseWriter, r *http.Request) {
+
 	err := r.ParseForm()
 	if err != nil {
 		app.clientError(w, http.StatusBadRequest)
@@ -146,13 +148,17 @@ func (app *application) loginUser(w http.ResponseWriter, r *http.Request) {
 	}
 	email := r.FormValue("email")
 	password := r.FormValue("password")
-	userID, err := app.users.Authenticate(email, password)
+	ID, err := app.users.Authenticate(email, password)
 	if err != nil {
-		app.session.Put(r, "flash", "Login failed. Please check your credentials.")
-		http.Redirect(w, r, "login.page.tmpl", http.StatusSeeOther)
+		if errors.Is(err, models.ErrInvalidCredentials) {
+			app.session.Put(r, "flash", "Invalid email or password.")
+			app.render(w, r, "login.page.tmpl", nil)
+			return
+		}
+		app.serverError(w, err)
 		return
 	}
-	app.session.Put(r, "authenticatedUserID", userID)
+	app.session.Put(r, "authenticatedUserID", ID)
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
@@ -160,4 +166,8 @@ func (app *application) logoutUser(w http.ResponseWriter, r *http.Request) {
 	app.session.Remove(r, "authenticatedUserID")
 	app.session.Put(r, "flash", "You've been logged out successfully!")
 	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+func (app *application) admin(w http.ResponseWriter, r *http.Request) {
+	app.render(w, r, "admin.page.tmpl", &templateData{})
+
 }

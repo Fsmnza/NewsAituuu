@@ -1,0 +1,15 @@
+{{template "base" .}}
+{{define "title"}}Admin{{end}}
+{{define "main"}}
+<form action='/' method='POST' novalidate>
+    <div style="width: 480px; height: 40px">
+        <label for>Role:</label>
+        <select name="role">
+            <option value="user">User</option>
+            <option value="teacher">Teacher</option>
+        </select>
+    <div>
+        <input type='submit' value='Submit'>
+    </div>
+</form>
+{{end}}
