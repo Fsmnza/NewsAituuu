@@ -13,6 +13,7 @@ type templateData struct {
 	Category        string
 	IsAuthenticated bool
 	NewsArray       []*models.News
+	UserRole        string
 }
 
 func newTemplateCache(dir string) (map[string]*template.Template, error) {

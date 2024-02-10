@@ -18,34 +18,26 @@
     <h1 style="font-size: 150%"><a href='/'>Astana IT University News & Events</a></h1>
 </header>
 <nav>
-<div style="font-size: 1ex">
-    <a href='/'>Home</a>
-    {{if .IsAuthenticated}}
-    <a href='/news/creationPage'>Create</a>
-    {{end}}
-</div>
-    <div>
-<!--    <a href='/news/students'>Students</a>-->
-<!--    <a href='/news/staff'>Staff</a>-->
-<!--    <a href='/news/applicants'>Applicants</a>-->
-<!--    <a href='/news/researches'>Researches</a>-->
-<!--    <a href='/news/contacts'>Contacts</a>-->
-    {{if .IsAuthenticated}}
-    <form action='/user/logout' method='POST'>
-        <button>Logout</button>
-    </form>
-    {{else}}
-    <a href='/user/signup'>Signup</a>
-    <a href='/user/login'>Login</a>
-    {{end}}
-</div>
-    </nav>
-<!--    <div>-->
-<!--        <a href='/user/signup'>Signup</a>-->
-<!--        <a href='/user/login'>Login</a>-->
-<!--        <form action='/user/logout' method='POST'>-->
-<!--            <button>Logout</button> </form>-->
-<!--    </div>-->
+    <ul>
+        <li><a href='/'>Home</a></li>
+        {{if .IsAuthenticated}}
+        <li><a href='/news/creationPage'>Create</a></li>
+        {{end}}
+        <li><a href='/news/contacts'>Contacts</a></li>
+        {{if .IsAuthenticated}}
+        <li><a href='/news/students'>Students</a></li>
+        <li><a href='/news/staff'>Staff</a></li>
+        <li><a href='/news/applicants'>Applicants</a></li>
+        <li><a href='/news/researches'>Researches</a></li>
+        <form action='/user/logout' method='POST'>
+            <button>Logout</button>
+        </form>
+        {{else}}
+        <li><a href='/user/signup'>Signup</a></li>
+        <li><a href='/user/login'>Login</a></li>
+        {{end}}
+    </ul>
+</nav>
 <main>
     {{with .Flash}}
     <div class='flash'>{{.}}</div>
