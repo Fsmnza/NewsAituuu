@@ -11,19 +11,35 @@ import (
 )
 
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path != "/" {
-		app.notFound(w)
-		return
-	}
+	//userID, ok := app.session.Get(r, "authenticatedUserID").(int)
+	//if !ok {
+	//	app.notFound(w)
+	//	return
+	//}
+	//isAdmin, err := app.users.IsAdmin(userID)
+	//if err != nil {
+	//	app.serverError(w, err)
+	//	return
+	//}
+
 	s, err := app.news.Latest()
 	if err != nil {
 		app.serverError(w, err)
 		return
 	}
-	app.render(w, r, "home.page.tmpl", &templateData{
+
+	td := &templateData{
 		NewsArray: s,
-	})
+		UserRole:  "user",
+	}
+
+	//if isAdmin {
+	//	td.UserRole = "admin"
+	//}
+
+	app.render(w, r, "home.page.tmpl", td)
 }
+
 func (app *application) showNews(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(r.URL.Query().Get("id"))
 	if err != nil || id < 1 {
@@ -52,34 +68,28 @@ func (app *application) creationPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) createNews(w http.ResponseWriter, r *http.Request) {
+	userID, ok := app.session.Get(r, "authenticatedUserID").(int)
+	if !ok {
+		app.notFound(w)
+		return
+	}
+	isTeacher, err := app.users.IsTeacher(userID)
+	if err != nil {
+		app.serverError(w, err)
+		return
+	}
+	if !isTeacher {
+		app.clientError(w, http.StatusForbidden)
+		return
+	}
+
 	if r.Method != http.MethodPost {
 		w.Header().Set("Allow", http.MethodPost)
 		app.clientError(w, http.StatusMethodNotAllowed)
 		return
 	}
-	title := r.FormValue("title")
-	content := r.FormValue("content")
-	category := r.FormValue("category")
-	if title == "" || content == "" || category == "" {
-		app.clientError(w, http.StatusBadRequest)
-		return
-	}
-	if len(title) > 20 || len(content) < 10 || len(content) > 200 {
-		app.clientError(w, http.StatusBadRequest)
-		return
-	}
-	validCategories := []string{"Students", "Staff", "Applicants", "Researches"}
-	if !malika(validCategories, category) {
-		app.clientError(w, http.StatusBadRequest)
-		return
-	}
-	id, err := app.news.Insert(title, content, category)
-	if err != nil {
-		app.serverError(w, err)
-		return
-	}
 	app.session.Put(r, "flash", "News successfully created!")
-	http.Redirect(w, r, fmt.Sprintf("/news?id=%d", id), http.StatusSeeOther)
+	http.Redirect(w, r, fmt.Sprintf("/news?id=%d"), http.StatusSeeOther)
 }
 func malika(slice []string, s string) bool {
 	for _, value := range slice {
@@ -117,6 +127,7 @@ func (app *application) contacts(writer http.ResponseWriter, request *http.Reque
 func (app *application) signupUserForm(w http.ResponseWriter, r *http.Request) {
 	app.render(w, r, "signup.page.tmpl", &templateData{})
 }
+
 func (app *application) signupUser(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
@@ -126,7 +137,6 @@ func (app *application) signupUser(w http.ResponseWriter, r *http.Request) {
 	name := r.FormValue("name")
 	email := r.FormValue("email")
 	password := r.FormValue("password")
-	//role := models.RoleUser
 	fmt.Println(name + email + password)
 	err = app.users.Insert(name, email, password)
 	if err != nil {
@@ -167,7 +177,21 @@ func (app *application) logoutUser(w http.ResponseWriter, r *http.Request) {
 	app.session.Put(r, "flash", "You've been logged out successfully!")
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
-func (app *application) admin(w http.ResponseWriter, r *http.Request) {
-	app.render(w, r, "admin.page.tmpl", &templateData{})
 
-}
+//func (app *application) admin(w http.ResponseWriter, r *http.Request) {
+//	userID, ok := app.session.Get(r, "authenticatedUserID").(int)
+//	if !ok {
+//		app.notFound(w)
+//		return
+//	}
+//	role, err := app.users.GetRole(userID)
+//	if err != nil {
+//		app.serverError(w, err)
+//		return
+//	}
+//	if role != "admin" {
+//		app.clientError(w, http.StatusForbidden)
+//		return
+//	}
+//	app.render(w, r, "admin.page.tmpl", &templateData{})
+//}
