@@ -27,16 +27,7 @@
 </header>
 <nav>
     <ul>
-        <li><a href='/news/contacts'>Contacts</a></li>
-        {{if .IsAuthenticated}}
-        <li><a href='/'>Home</a></li>
-        <li><a href='/news/creationPage'>Create</a></li>
-        <li><a href='/news/students'>Students</a></li>
-        <li><a href='/news/staff'>Staff</a></li>
-        <li><a href='/news/applicants'>Applicants</a></li>
-        <li><a href='/news/researches'>Researches</a></li>
-        <form action='/user/logout' method='POST'>
-            <button>Logout</button>
+        <li><a href='/news/contacts'>Contacts</a></li
         </form>
         {{else}}
         <li><a href='/user/signup'>Signup</a></li>
