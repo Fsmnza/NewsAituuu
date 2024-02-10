@@ -24,36 +24,5 @@ func (app *application) notFound(w http.ResponseWriter) {
 
 func (app *application) isAuthenticated(r *http.Request) bool {
 	return app.session.Exists(r, "authenticatedUserID")
-}
-
-func (app *application) addDefaultData(td *templateData, r *http.Request) *templateData {
-	if td == nil {
-		td = &templateData{}
-	}
-	td.CurrentYear = time.Now().Year()
-	td.Flash = app.session.PopString(r, "flash")
-	td.IsAuthenticated = app.isAuthenticated(r)
-	if td.IsAuthenticated {
-		userId := app.session.GetInt(r, "authenticatedUserID")
-		user, err := app.users.Get(userId)
-		if err != nil {
-			app.errorLog.Fatal("We cant find user")
-		}
-		td.UserRole = user.Role
-	}
-	return td
-}
-
-func (app *application) render(w http.ResponseWriter, r *http.Request, name string, td *templateData) {
-	ts, ok := app.templateCache[name]
-	if !ok {
-		app.serverError(w, fmt.Errorf("The template %s does not exist", name))
-		return
-	}
-	buf := new(bytes.Buffer)
-	err := ts.Execute(w, app.addDefaultData(td, r))
-	if err != nil {
-		app.serverError(w, err)
-	}
 	buf.WriteTo(w)
 }
