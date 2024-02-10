@@ -114,31 +114,6 @@ func (app *application) contacts(writer http.ResponseWriter, request *http.Reque
 	app.render(writer, request, "contacts.page.tmpl", &templateData{})
 }
 
-func (app *application) signupUserForm(w http.ResponseWriter, r *http.Request) {
-	app.render(w, r, "signup.page.tmpl", &templateData{})
-}
-func (app *application) signupUser(w http.ResponseWriter, r *http.Request) {
-	err := r.ParseForm()
-	if err != nil {
-		app.clientError(w, http.StatusBadRequest)
-		return
-	}
-	name := r.FormValue("name")
-	email := r.FormValue("email")
-	password := r.FormValue("password")
-	//role := models.RoleUser
-	fmt.Println(name + email + password)
-	err = app.users.Insert(name, email, password)
-	if err != nil {
-		app.serverError(w, err)
-		return
-	}
-	app.session.Put(r, "flash", "Sign up is successful")
-	http.Redirect(w, r, "/user/login", http.StatusSeeOther)
-}
-func (app *application) loginUserForm(w http.ResponseWriter, r *http.Request) {
-	app.render(w, r, "login.page.tmpl", &templateData{})
-}
 func (app *application) loginUser(w http.ResponseWriter, r *http.Request) {
 
 	err := r.ParseForm()
@@ -155,19 +130,4 @@ func (app *application) loginUser(w http.ResponseWriter, r *http.Request) {
 			app.render(w, r, "login.page.tmpl", nil)
 			return
 		}
-		app.serverError(w, err)
-		return
-	}
-	app.session.Put(r, "authenticatedUserID", ID)
-	http.Redirect(w, r, "/", http.StatusSeeOther)
-}
-
-func (app *application) logoutUser(w http.ResponseWriter, r *http.Request) {
-	app.session.Remove(r, "authenticatedUserID")
-	app.session.Put(r, "flash", "You've been logged out successfully!")
-	http.Redirect(w, r, "/", http.StatusSeeOther)
-}
-func (app *application) admin(w http.ResponseWriter, r *http.Request) {
-	app.render(w, r, "admin.page.tmpl", &templateData{})
-
-}
+		a]
