@@ -5,7 +5,11 @@ import (
 	"time"
 )
 
-var ErrNoRecord = errors.New("models: no matching record found")
+var (
+	ErrNoRecord           = errors.New("models: no matching record found")
+	ErrInvalidCredentials = errors.New("models: invalid credentials")
+	ErrDuplicateEmail     = errors.New("models: duplicate email")
+)
 
 type News struct {
 	ID       int
@@ -13,4 +17,12 @@ type News struct {
 	Content  string
 	Date     time.Time
 	Category string
+}
+type User struct {
+	ID             int
+	Name           string
+	Email          string
+	HashedPassword []byte
+	Created        time.Time
+	Active         bool
 }

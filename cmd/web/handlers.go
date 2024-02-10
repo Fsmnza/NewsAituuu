@@ -113,3 +113,52 @@ func (app *application) renderCategoryPage(w http.ResponseWriter, r *http.Reques
 func (app *application) contacts(writer http.ResponseWriter, request *http.Request) {
 	app.render(writer, request, "contacts.page.tmpl", &templateData{})
 }
+
+func (app *application) signupUserForm(w http.ResponseWriter, r *http.Request) {
+	app.render(w, r, "signup.page.tmpl", &templateData{})
+}
+func (app *application) signupUser(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		app.clientError(w, http.StatusBadRequest)
+		return
+	}
+	name := r.FormValue("name")
+	email := r.FormValue("email")
+	password := r.FormValue("password")
+	fmt.Println(name + email + password)
+	err = app.users.Insert(name, email, password)
+	if err != nil {
+		app.serverError(w, err)
+		return
+	}
+	app.session.Put(r, "flash", "Sign up is successful")
+	http.Redirect(w, r, "/user/login", http.StatusSeeOther)
+}
+func (app *application) loginUserForm(w http.ResponseWriter, r *http.Request) {
+	app.render(w, r, "login.page.tmpl", &templateData{})
+}
+func (app *application) loginUser(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		app.clientError(w, http.StatusBadRequest)
+		return
+	}
+	email := r.FormValue("email")
+	password := r.FormValue("password")
+	userID, err := app.users.Authenticate(email, password)
+	if err != nil {
+		app.session.Put(r, "flash", "Login failed. Please check your credentials.")
+		http.Redirect(w, r, "login.page.tmpl", http.StatusSeeOther)
+		return
+	}
+	app.session.Put(r, "authenticatedUserID", userID)
+	app.session.Put(r, "flash", "Login is successful")
+	http.Redirect(w, r, "/news/creationPage", http.StatusSeeOther)
+}
+
+func (app *application) logoutUser(w http.ResponseWriter, r *http.Request) {
+	app.session.Remove(r, "authenticatedUserID")
+	app.session.Put(r, "flash", "You've been logged out successfully!")
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+}

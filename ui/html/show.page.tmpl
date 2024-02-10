@@ -1,10 +1,16 @@
 {{template "base" .}}
 {{define "title"}}News #{{.News.ID}}{{end}}
 {{define "main"}}
-{{with .News}} <div class='news'>
-    <div class='metadata'> <strong>{{.Title}}</strong> <span>#{{.ID}}</span>
-    </div> <pre><code>{{.Content}}</code></pre> <div class='metadata'>
-    <time>Created: {{.Date}}</time></div>
-    <p class='news-category'>Category: {{.Category}}</p>
+{{with .News}}
+<div class='news'>
+    <div class='metadata'>
+        <h2 class='news-title'>{{.Title}}</h2>
+        <span class='news-id'>#{{.ID}}</span>
+    </div>
+    <pre class='news-content'><code>{{.Content}}</code></pre>
+    <div class='metadata'>
+        <p class='news-category'>Category: {{.Category}}</p>
+    </div>
 </div>
-{{end}} {{end}}
+{{end}}
+{{end}}
